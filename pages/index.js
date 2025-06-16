@@ -1,13 +1,73 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
 import { debounce } from '../utils';
 import Cards from '../components/Cards';
 import Table from '../components/Table';
 import PageButton from '../components/PageButton';
+import Pagination from '../components/Pagination';
+
+const FormContainer = styled.form`
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #ffffff;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+`;
+
+const InputRowGroup = styled(InputGroup)`
+  flex-direction: row;
+  align-items: center;
+`
+
+const Label = styled.label`
+  font-size: 14px;
+  color: #374151;
+`;
+
+const Input = styled.input`
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #4b5563;
+
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+`;
+
+const Select = styled.select`
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #4b5563;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+`;
+
+const CheckboxGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 
 export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
-    category: '',
+    category: [],
     priceMin: '',
     priceMax: '',
     inStock: false,
@@ -58,8 +118,8 @@ export default function Home() {
         const matchesName = updatedFormData.name
           ? item.name?.toLowerCase().includes(updatedFormData.name.toLowerCase())
           : true;
-        const matchesCategory = updatedFormData.category
-          ? item.category === updatedFormData.category
+        const matchesCategory = updatedFormData.category.length > 0
+          ? updatedFormData.category.includes(item.category)
           : true;
         const matchesPriceMin = updatedFormData.priceMin
           ? item.price >= parseFloat(updatedFormData.priceMin)
@@ -86,6 +146,21 @@ export default function Home() {
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
     };
+    setFormData(updatedFormData);
+    debouncedFilter(updatedFormData);
+  }
+
+  function handleCategoryChange(event) {
+    const { value, checked } = event.target;
+    const updatedCategories = checked
+      ? [...formData.category, value] // 新增選中的類別
+      : formData.category.filter((category) => category !== value); // 移除未選中的類別
+
+    const updatedFormData = {
+      ...formData,
+      category: updatedCategories,
+    };
+
     setFormData(updatedFormData);
     debouncedFilter(updatedFormData);
   }
@@ -164,37 +239,38 @@ export default function Home() {
   }
 
   return (
-    <main className="max-w-screen-lg m-0 mx-auto">
-      <form className="filter-container max-w-7xl" onSubmit={(event)=> event.preventDefault()}>
-        <div className="input-box">
-          <label htmlFor="name">名稱</label>
-          <input
+    <main className="max-w-screen-lg m-0 mx-auto ring-gray-300">
+      <FormContainer onSubmit={(event) => event.preventDefault()}>
+        <InputGroup>
+          <Label htmlFor="name">名稱</Label>
+          <Input
             type="text"
             name="name"
             placeholder="請輸入名稱"
             value={formData.name}
             onChange={handleChange}
           />
-        </div>
-        <div className="input-box">
-          <label htmlFor="category">類別</label>
-          <select
-            name="category"
-            id="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            <option value="">全部</option>
+        </InputGroup>
+        <InputGroup>
+          <Label>類別</Label>
+          <CheckboxGroup>
             {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  id={`category-${index}`}
+                  value={category}
+                  checked={formData.category.includes(category)}
+                  onChange={handleCategoryChange}
+                />
+                <Label htmlFor={`category-${index}`} className="mx-2">{category}</Label>
+              </div>
             ))}
-          </select>
-        </div>
-        <div className="input-box">
-          <label htmlFor="price">價格</label>
-          <input
+          </CheckboxGroup>
+        </InputGroup>
+        <InputRowGroup>
+          <Label htmlFor="price">價格</Label>
+          <Input
             type="number"
             name="priceMin"
             placeholder="最低價"
@@ -203,60 +279,47 @@ export default function Home() {
             onChange={handleChange}
           />
           <span>~</span>
-          <input
+          <Input
             type="number"
             name="priceMax"
             placeholder="最高價"
             value={formData.priceMax}
             onChange={handleChange}
           />
-        </div>
-        <div className="input-box">
+        </InputRowGroup>
+        <CheckboxGroup>
+          <Label htmlFor="inStock">有庫存</Label>
           <input
             type="checkbox"
             name="inStock"
             checked={formData.inStock}
             onChange={handleChange}
           />
-          <label htmlFor="inStock">有庫存</label>
-        </div>
-      </form>
-      <div className="sort-container">
+        </CheckboxGroup>
+      </FormContainer>
+      <div className="sort-container my-2 text-right ">
         <label htmlFor="sort-price">排序：</label>
         <select
           id="sort-price"
           onChange={handleSortFilter}
+          className='cursor-pointer'
         >
           <option value="">無排序</option>
           <option value="asc">價格低到高</option>
           <option value="desc">價格高到低</option>
         </select>
       </div>
-
-      <div className="pagination">
-        <p>
-          Total: {filteredData.length}
-        </p>
-        <label htmlFor="items-per-page">每頁顯示：</label>
-        <select id="items-per-page" value={itemsPerPage} onChange={handleItemsPerPageChange}>
-          <option value="10">10</option>
-          <option value="30">30</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-        <span>當前頁數：{currentPage}</span>
-        <label htmlFor="direct-page-input">跳至頁數：</label>
-        <input
-          id="direct-page-input"
-          type="number"
-          min="1"
-          max={totalPages}
-          value={currentPage}
-          onChange={handleDirectPageInput}
-        />
-        <div className="page-buttons">{renderPagination()}</div>
-      </div>
       {isMobile ? <Cards items={paginatedData} /> : <Table data={paginatedData} />}
+
+      <Pagination
+        filteredData={filteredData}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handleItemsPerPageChange={handleItemsPerPageChange}
+        handleDirectPageInput={handleDirectPageInput}
+        renderPagination={renderPagination}
+      />
     </main>
   );
 }

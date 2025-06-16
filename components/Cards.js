@@ -10,11 +10,11 @@ const CardsGrid = styled.div`
 
 const Card = styled.div`
   width: calc(50% - 16px);
-  border: 1px solid #ddd;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: #ffffff;
   transition: transform 0.2s, box-shadow 0.2s;
 
   &:hover {
@@ -26,22 +26,21 @@ const Card = styled.div`
 const CardTitle = styled.p`
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: #374151;
 `;
 
 const CardText = styled.p`
   font-size: 14px;
   margin-top: 8px;
-  color: #555;
+  color: #4b5563;
 `;
 
 const CardPrice = styled(CardText)`
-  font-weight: bold;
   color: #e60023;
 `;
 
 const CardStock = styled(CardText)`
-  color: #008000;
+  color: #10b981;
 `;
 
 export default function Cards({ items }) {
@@ -49,10 +48,10 @@ export default function Cards({ items }) {
     <CardsGrid>
       {items.map((item, index) => (
         <Card key={index}>
-          <CardTitle>[商品名稱 name] {item.name}</CardTitle>
-          <CardText>[類別 category] {item.category}</CardText>
-          <CardPrice>[價格 price] ${item.price}</CardPrice>
-          <CardStock>[庫存 inStock] {item.inStock ? '有庫存' : '無庫存'}</CardStock>
+          <CardTitle>商品名稱 {item.name}</CardTitle>
+          <CardText>類別 {item.category}</CardText>
+          <CardPrice>價格 ${item.price}</CardPrice>
+          <CardStock>庫存 {item.inStock ? '有庫存' : '無庫存'}</CardStock>
         </Card>
       ))}
     </CardsGrid>
