@@ -1,8 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-const PaginationStyle = styled.div`
-  text-align: center;
-`
 
 export default function Pagination({
   filteredData,
@@ -14,7 +10,7 @@ export default function Pagination({
   renderPagination,
 }) {
   return (
-    <PaginationStyle className='p-2.5 gap-2 flex-auto'>
+    <div className='p-2.5 gap-2 flex-auto text-center'>
       <p>總共: {filteredData.length} 筆，當前頁數：{currentPage}</p>
       <label htmlFor="items-per-page">每頁顯示：</label>
       <select id="items-per-page" value={itemsPerPage} onChange={handleItemsPerPageChange}>
@@ -33,6 +29,6 @@ export default function Pagination({
         onChange={handleDirectPageInput}
       />
       <div className="page-buttons">{renderPagination()}</div>
-    </PaginationStyle>
+    </div>
   );
 }

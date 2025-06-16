@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tag, WarnTag } from './Tags';
 
 const TableWrapper = styled.table`
   width: 100%;
@@ -18,6 +19,7 @@ const TableHeader = styled.th`
 `;
 
 const TableCell = styled.td`
+  background: #fff;
   border-bottom: 1px solid #e5e7eb;
   padding: 8px;
   text-align: left;
@@ -26,18 +28,6 @@ const TableCell = styled.td`
 
 const TableCellTextRight = styled(TableCell)`
   text-align: right;
-`;
-
-const Tag = styled.div`
-  background: #10b981;
-  color: white;
-  border-radius: 5px;
-  text-align: center;
-  width: 80px;
-`;
-
-const WarnTag = styled(Tag)`
-  background: #ef4444;
 `;
 
 export default function Table({ data }) {

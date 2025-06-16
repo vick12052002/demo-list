@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tag, WarnTag } from './Tags';
 
 const CardsGrid = styled.div`
   display: flex;
@@ -35,14 +36,6 @@ const CardText = styled.p`
   color: #4b5563;
 `;
 
-const CardPrice = styled(CardText)`
-  color: #e60023;
-`;
-
-const CardStock = styled(CardText)`
-  color: #10b981;
-`;
-
 export default function Cards({ items }) {
   return (
     <CardsGrid>
@@ -50,8 +43,8 @@ export default function Cards({ items }) {
         <Card key={index}>
           <CardTitle>商品名稱 {item.name}</CardTitle>
           <CardText>類別 {item.category}</CardText>
-          <CardPrice>價格 ${item.price}</CardPrice>
-          <CardStock>庫存 {item.inStock ? '有庫存' : '無庫存'}</CardStock>
+          <CardText>價格 ${item.price}</CardText>
+          <CardText>{item.inStock ? <Tag>有庫存</Tag>: <WarnTag>無庫存</WarnTag>}</CardText>
         </Card>
       ))}
     </CardsGrid>
