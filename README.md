@@ -1,40 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Demo List - 複雜篩選功能模擬
 
-## Getting Started
+## 專案簡介
+這是一個模擬複雜篩選功能的專案，資料來源為靜態檔案 `items.json`，包含 10,000 筆資料，用於模擬大型數據集的篩選與展示功能。
 
-First, run the development server:
+## 功能特色
+1. **篩選功能**
+   - 支援多條件篩選（名稱、類別、價格範圍、庫存狀態）。
+   - **類別篩選**：
+     - 允許用戶多選類別。
+     - 提供下拉清單，顯示所有類別，並支援關鍵字搜尋以快速篩選類別。
+   - **價格範圍篩選**：
+     - 用戶可輸入最低和最高價格，篩選符合價格範圍的商品。
+   - **庫存篩選**：
+     - 用戶可選擇是否僅顯示「有庫存」的商品（透過 checkbox 控制）。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. **排序功能**：
+   - 支援價格升序、降序排列。
+
+3. **分頁功能**：
+   - 支援每頁顯示 10、30、50、100 筆資料的選項，預設 30 筆/頁。
+   - 提供快捷跳頁功能（輸入框與頁碼按鈕）。
+
+
+4. **響應式設計**：
+   - 桌機裝置顯示表格視圖（`Table`），商品以表格形式顯示，每行顯示一個商品。
+   - 手機裝置顯示卡片視圖（`Cards`），商品以卡片形式顯示，每行顯示最多兩個商品。
+
+4. **高效數據處理**：
+   - 使用 `debounce` 函數減少高頻操作的性能損耗。
+   - 即時更新篩選結果並重置分頁。
+
+## 使用技術
+- **React**：用於構建使用者介面。
+- **Styled-Components**：用於管理元件的樣式。
+- **Debounce**：優化高頻事件處理。
+- **靜態檔案**：資料來源為 `public/items.json`，模擬大型數據集。
+
+## 專案結構
+```
+/Users/youjiarong/Desktop/demo-list/
+├── components/
+│   ├── Cards.js
+│   ├── Table.js
+│   ├── PageButton.js
+├── pages/
+│   ├── index.js
+├── public/
+│   ├── items.json
+├── utils/
+│   ├── index.js
+├── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 如何運行
+1. **安裝依賴**：
+   ```bash
+   npm install
+   ```
+2. **啟動開發伺服器**：
+    ```bash
+    npm run dev
+    ```
+3. **開啟瀏覽器**：
+   - 預設網址為 `http://localhost:3000`。
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## 資料來源
+- `items.json`：包含 10,000 筆模擬資料，格式如下：
+  ```json
+  [
+    {
+    "name": "Item 1",
+    "category": "A",
+    "price": 100,
+    "inStock": true
+    },
+    {
+    "name": "Item 2",
+    "category": "B",
+    "price": 3300,
+    "inStock": false
+    },
+  ]
+  ```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## 聯絡方式
+如有任何問題，歡迎聯絡專案開發者。
